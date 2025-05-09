@@ -34,3 +34,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/mini-cal:${{ github.sha }}
+            sudo docker stop mini-cal || true
+            sudo docker rm mini-cal || true
+            sudo docker run -d --name mini-cal -p 3000:3000 -e DATABASE_URL=${{ secrets.DB_URL }} -e AUTH_SECRET=your-secret-key ${{ secrets.DOCKER_USERNAME }}/mini-cal:${{ github.sha }}
