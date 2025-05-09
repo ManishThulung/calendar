@@ -1,11 +1,5 @@
 "use server";
 
-import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
-import { db } from "@/prisma";
-import { Prisma } from "@prisma/client";
-import { registrationSchema } from "@/shema/auth/auth-schema";
-import { z } from "zod";
 import { ActionResponse } from "@/lib/server/response";
 // import { sendMail } from "@/lib/functions/email";
 // import { IEmailPayload } from "@/types/custom";

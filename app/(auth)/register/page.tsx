@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 const page = async () => {
   const session = await getServerSession(authOptions);
   if (session?.user) {
-    redirect("/u");
+    redirect("/");
   }
   return (
     <div className="mx-auto flex h-screen max-w-[1440px] flex-row items-center justify-center gap-10 px-10 py-8 md:gap-4">
