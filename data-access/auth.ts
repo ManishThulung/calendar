@@ -6,6 +6,7 @@ import { db } from "@/prisma";
 import { Prisma } from "@prisma/client";
 import { registrationSchema } from "@/shema/auth/auth-schema";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 // import { sendMail } from "@/lib/functions/email";
 // import { IEmailPayload } from "@/types/custom";
 
@@ -59,6 +60,31 @@ export async function register({
     // await sendMail(emailVerifyPayload);
 
     return NextResponse.json({ message: "Check your email to verify" });
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2002") {
+        return NextResponse.json(
+          { error: "Email already exist" },
+          { status: 400 }
+        );
+      }
+    }
+    throw err;
+  }
+}
+
+export async function updateUserEmail(email: string) {
+  try {
+    await db.user.update({
+      where: {
+        id: "532eecc6-7574-48f2-b062-ead767cc2daf",
+      },
+      data: {
+        email: email.toLowerCase(),
+      },
+    });
+    revalidatePath("/", "layout");
+    return { success: true };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === "P2002") {

@@ -58,19 +58,54 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user, trigger, session }) => {
+      console.log("JWT Callback:", { trigger, session });
+
       if (user) {
         token.uid = user.id;
+        token.username = user.username;
+        token.email = user.email;
       }
+
+      // Handle session update in JWT
+      if (trigger === "update" && session) {
+        console.log("JWT Update:", session);
+        // Update token with new session data
+        token.email = session.user?.email;
+        token.username = session.user?.name;
+      }
+
       return token;
     },
-    session: async ({ session, token }) => {
+    session: async ({ session, token, trigger, newSession }) => {
+      console.log("Session Callback:", { trigger, newSession });
+
+      console.log({ token, session }, "token and session");
       if (session.user) {
         session.user.id = token.uid as string;
         session.user.email = token.email as string;
         session.user.image = token.image as string;
         session.user.name = token.username as string;
       }
+
+      // // Handle session update
+      // if (trigger === "update") {
+      //   console.log("Session Update triggered");
+      //   // Get the latest user data from the database
+      //   const user = await db.user.findUnique({
+      //     where: { id: session.user.id },
+      //   });
+
+      //   if (user) {
+      //     // Update the session with the latest data
+      //     session.user = {
+      //       ...session.user,
+      //       email: user.email,
+      //       name: user.username,
+      //     };
+      //   }
+      // }
+
       return session;
     },
     async signIn({ user, account }) {

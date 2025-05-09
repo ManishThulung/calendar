@@ -44,11 +44,15 @@ function LoginForm() {
   async function onSubmit(data: z.infer<typeof loginSchema>) {
     const { username, password } = data;
     try {
-      await signIn("credentials", {
+      const response = await signIn("credentials", {
         username,
         password,
         redirect: false,
       });
+      if (!response?.error && response?.ok && response.status === 200) {
+        form.reset();
+        window.location.assign("/");
+      }
     } catch (error: any) {
       throw error;
     }
