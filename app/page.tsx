@@ -14,7 +14,10 @@ const page = async () => {
         name: {session?.user.name}
         email: {session?.user.email}
       </div>
-      all users: {JSON.stringify(user)}
+      <div>
+        <p className="my-5">updated</p>
+        all users: {JSON.stringify(user)}
+      </div>
       <Update />
     </>
   );
