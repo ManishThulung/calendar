@@ -127,13 +127,13 @@ export const authOptions: NextAuthOptions = {
           });
           if (newUser) {
             user.id = newUser.id;
-            user.image = newUser.imageUrl;
+            user.image = newUser.imageUrl ?? "";
             return true;
           }
         }
         if (userData && (await compare(user.email!, userData.password))) {
           user.id = userData.id;
-          user.image = userData.imageUrl;
+          user.image = userData.imageUrl ?? "";
           return true;
         }
       }

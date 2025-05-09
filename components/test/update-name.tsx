@@ -5,7 +5,7 @@ import { updateUserEmail } from "@/data-access/auth";
 import { useSession } from "next-auth/react";
 
 export default function Update() {
-  const { data: session, status, update } = useSession();
+  const { data: session, update } = useSession();
 
   const handleUpdate = async () => {
     const email = "update@gmail.com";
